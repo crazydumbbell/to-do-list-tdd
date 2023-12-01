@@ -1,12 +1,14 @@
 import { useState } from "react";
 
-const CreateTodo = () => {
+const CreateTodo = ({ onInsert }) => {
   const [createTodo, setCreateTodo] = useState("");
 
   const onClickSubmitTodo = (e) => {
     e.preventDefault();
 
     if (!createTodo) return;
+
+    onInsert(createTodo);
 
     setCreateTodo("");
   };

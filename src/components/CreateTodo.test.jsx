@@ -2,18 +2,29 @@ import { fireEvent, render } from "@testing-library/react";
 import CreateTodo from "./CreateTodo";
 
 describe(`<CreateTodo />`, () => {
+  const setup = (props = {}) => {
+    const { getByText, getByPlaceholderText } = render(
+      <CreateTodo {...props} />
+    );
+
+    const input = getByPlaceholderText("할 일 입력!!!");
+    const submit = getByText("투두생성");
+
+    return {
+      input,
+      submit,
+    };
+  };
+
   it(`input & button 확인`, () => {
-    const { getByText, getByPlaceholderText } = render(<CreateTodo />);
+    const { input, submit } = setup();
 
-    getByPlaceholderText("할 일 입력!!!");
-
-    getByText("투두생성");
+    expect(input).toBeTruthy();
+    expect(submit).toBeTruthy();
   });
 
   it("input 입력값 확인", () => {
-    const { getByPlaceholderText } = render(<CreateTodo />);
-
-    const input = getByPlaceholderText("할 일 입력!!!");
+    const { input } = setup();
 
     fireEvent.change(input, {
       target: {
@@ -25,9 +36,8 @@ describe(`<CreateTodo />`, () => {
   });
 
   it("투두생성", () => {
-    const { getByText, getByPlaceholderText } = render(<CreateTodo />);
-    const input = getByPlaceholderText("할 일 입력!!!");
-    const submit = getByText("투두생성");
+    const onInsert = jest.fn();
+    const { input, submit } = setup({ onInsert });
 
     fireEvent.change(input, {
       target: {
